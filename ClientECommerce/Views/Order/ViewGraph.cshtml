@@ -1,0 +1,49 @@
+﻿@using ClientECommerce.Models.ViewModels
+@model List<OrderProductDTO>
+
+@{
+    ViewData["Title"] = "View Graph";
+
+    var teamNames = ViewBag.TeamNames;
+    var teamOrderNumbers = ViewBag.TeamOrderNumbers;
+
+    var teamNamesSerialized = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(teamNames));
+    var teamOrderNumbersSerialized = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(teamOrderNumbers));
+}
+<div style="margin-bottom:100px">
+    <h1 style="margin-left:40%;">Gráfico de Pedidos por time</h1>
+    <div style="width:50%; margin:auto";>
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+
+@section Scripts{
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var teamNamesSerialized = @teamNamesSerialized;
+    var teamOrderNumbersSerialized = @teamOrderNumbersSerialized;
+       const labels = teamNamesSerialized;
+
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'My First dataset',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: teamOrderNumbersSerialized,
+      }]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {}
+    };
+    const myChart = new Chart(
+      document.getElementById('myChart'),
+      config
+    );
+</script>
+
+}

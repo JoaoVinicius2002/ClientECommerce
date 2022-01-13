@@ -1,0 +1,74 @@
+﻿@using ClientECommerce.Models.ViewModels
+@model List<OrderProductDTO>
+
+@{
+    ViewData["Title"] = "View Orders";
+    Pager pager = new Pager();
+    int pageNumber = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNumber = pager.CurrentPage;
+    }
+    }
+<div style="margin-bottom:100px">
+    <div>
+        <div style="margin-left:100px;">
+            <h1>Tabela de pedidos</h1>
+            <span>10 itens por página</span>
+        </div>
+        <table class="table table-bordered table-hover table-light table-responsive" style="width:90%; margin:auto;">
+            <thead>
+                <tr>
+                    <th>Endereço de entrega</th>
+                    <th>Já foi entregue?</th>
+                    <th>Time responsável</th>
+                    <th>Produtos</th>
+                    <th>Preço total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var orderProduct in Model)
+                {
+                    <tr>
+                        <td class="text-center">@orderProduct.OrderAddress</td>
+                        <td class="text-center">@(orderProduct.OrderWhenDelivered.CompareTo( DateTime.UtcNow) < 0 ? "Sim" : "Não")</td>
+                        <td><span><strong>@orderProduct.Team.Name</strong> - </span><small>@orderProduct.Team.Description - @orderProduct.Team.LicensePlateNumber</small></td>
+                        <td>
+                            @foreach (var product in orderProduct.Products)
+                            {
+                                <span>
+                                    <strong>@product.Name </strong>-
+                                </span>
+
+                                <small>@product.Description - @product.Price</small>
+
+                                <br />
+
+
+                            }
+                        </td>
+                        <td class="text-center">@orderProduct.TotalPrice</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+    <div class="container pull-right" >
+        @if (pager.TotalPages > 0)
+        {
+            <ul class="pagination justify-content-end">
+                @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                {
+                    <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-controller="Order" asp-action="ViewOrders" asp-route-pg="@pge">@pge</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+
