@@ -23,7 +23,7 @@ namespace ClientECommerce.Controllers
 
             var ordersTask = await repository.GetOrderProductsAsync();
 
-            const int pageSize = 3;
+            const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
 
